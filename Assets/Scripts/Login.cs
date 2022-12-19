@@ -8,10 +8,10 @@ using TMPro;
 //to the mySQL  database.
 public class Login : MonoBehaviour
 {
+
     /* Login Variables */
     [Header("Login Variables")]
     [SerializeField] private TextMeshProUGUI login_uname;
-    [SerializeField] private TextMeshProUGUI login_email;
     [SerializeField] private TextMeshProUGUI login_passwrd;
 
     /* Register Variables */
@@ -19,8 +19,15 @@ public class Login : MonoBehaviour
     [SerializeField] private TextMeshProUGUI reg_uname;
     [SerializeField] private TextMeshProUGUI reg_email;
     [SerializeField] private TextMeshProUGUI reg_passwrd;
+    [SerializeField] private TextMeshProUGUI feedback;
 
 
+
+    private void Start()
+    {
+        //clear the feedback @ start
+        feedback.text = "";
+    }
 
     public void UserRegister()
     {
@@ -32,8 +39,7 @@ public class Login : MonoBehaviour
     public void UserLogin()
     {
         Debug.Log("entered values for login:");
-        Debug.Log(login_uname.text);
-        Debug.Log(login_email.text);
+        Debug.Log(login_uname.text); 
         Debug.Log(login_passwrd.text);
     }
 }
