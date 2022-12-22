@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 using TMPro;
+using System.Text.RegularExpressions;
 
 //this script registers and logs-in the user
 //to the mySQL  database.
@@ -22,6 +23,7 @@ public class Login : MonoBehaviour
     [SerializeField] private TextMeshProUGUI feedback;
 
     private Color feedback_color;
+    private Color success_green;
     private Button register_button;
     private void Start()
     {
@@ -30,7 +32,7 @@ public class Login : MonoBehaviour
         //clear the feedback @ start
         feedback.text = "";
         feedback_color = feedback.color;
-
+        success_green = new Color(25f, 135f, 84f);
     }
 
     private bool Validate(int marker, string id)
@@ -44,15 +46,26 @@ public class Login : MonoBehaviour
         switch (marker)
         {
             case 1:
-                return id.Length > 5 ? true : false;
+                if (id.Length < 6) ErrorMessage("username is too short");
+                else if (id.Length > 30) ErrorMessage("username is too long");
+                else if (Regex.IsMatch(reg_uname.text, "^[a-zA-Z0-9_]*$")) ErrorMessage("username is invalid");
+                else
+                    return true;
+                break;
             case 2:
-                return id.Length > 5 ? true : false;
+                if (id.Length < 6) ErrorMessage("email is too short");
+                else if (id.Length > 30) ErrorMessage("email is too long");
+                else if (Regex.IsMatch(reg_uname.text, "^[a-zA-Z0-9_]*$")) ErrorMessage("emal is invalid");
+                else
+                    return true;
+                break;
             case 3:
                 return id.Length > 8 ? true : false;
             default:
                 Debug.LogWarning("incorrect validation code sent.");
                 return false;
         }
+        return false;
 
     }
     private void ErrorMessage(string msg)
@@ -60,9 +73,9 @@ public class Login : MonoBehaviour
         feedback.text = msg;
         feedback.color = Color.red;
     }
-    private void FeedbackMessage(string msg)
+    private void FeedbackMessage(string msg, Color c)
     {
-        feedback.color = feedback_color;
+        feedback.color = c;
         feedback.text = msg;
     }
     private IEnumerator RegisterPost()
@@ -77,6 +90,19 @@ public class Login : MonoBehaviour
 
         UnityWebRequest post = UnityWebRequest.Post("http://localhost/Unity/login.php", form);
         yield return post.SendWebRequest();
+
+        //if no errors
+        if(post.downloadHandler.error != null)
+        {
+            
+            FeedbackMessage("Success!", Color.green);
+            Debug.Log("no errors from database");
+            Debug.Log(post.downloadHandler.text);
+        }
+        else
+        {
+            Debug.LogError(post.downloadHandler.error);
+        }
     }
     public void UserRegister()
     {
@@ -86,17 +112,17 @@ public class Login : MonoBehaviour
         //Debug.Log(reg_passwrd.text);
         //Debug.Log(reg_uname.text);
         if (!Validate(1, reg_uname.text))
-            ErrorMessage("username is too short.");
+            Debug.Log("uname failed");
         else if (!Validate(2, reg_email.text))
-            ErrorMessage("email is too short.");
+            Debug.Log("email failed");
         else if (!Validate(3, reg_passwrd.text))
-            ErrorMessage("password is too short.");
+            Debug.Log("password failed");
         else
         {
             register_button.enabled = false;
 
-            //StartCoroutine(RegisterPost());
-            FeedbackMessage("processing request");
+            StartCoroutine(RegisterPost());
+            FeedbackMessage("processing request", feedback_color);
         }
         
 
@@ -108,6 +134,10 @@ public class Login : MonoBehaviour
         Debug.Log(login_passwrd.text);
 
        // StartCoroutine(LoginPost());
+    }
+    public void ResetFeedback()
+    {
+        feedback.text = "";
     }
     
 }
