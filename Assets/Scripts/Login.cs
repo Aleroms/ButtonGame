@@ -94,7 +94,7 @@ public class Login : MonoBehaviour
         form.AddField("password", reg_passwrd.text);
         form.AddField("unity-api-key", "SantiagoGames");
 
-        UnityWebRequest post = UnityWebRequest.Post("http://localhost/Unity/login.php", form);
+        UnityWebRequest post = UnityWebRequest.Post("http://localhost/Unity/register.php", form);
         yield return post.SendWebRequest();
 
         //if no errors
@@ -111,7 +111,7 @@ public class Login : MonoBehaviour
             Debug.LogError(post.downloadHandler.error);
         }
     }
-    
+    /*====================== Public Methods Below ===========================*/
     public void UserRegister()
     {
         ResetFeedback();
@@ -134,12 +134,19 @@ public class Login : MonoBehaviour
     }
     public void UserLogin()
     {
-        Debug.Log("entered values for login:");
-        Debug.Log(login_uname.text); 
-        Debug.Log(login_passwrd.text);
 
-       // StartCoroutine(LoginPost());
+        if (!Validate(1, reg_uname.text))
+            Debug.Log("uname failed");
+        else if (!Validate(3, reg_passwrd.text))
+            Debug.Log("password failed");
+        else
+        {
+            //StartCoroutine(LoginPost());
+            FeedbackMessage("logging in...", feedback_color);
+        }
     }
+
+    //======Reset Below============
     public void ResetFeedback()
     {
         feedback.text = "";
