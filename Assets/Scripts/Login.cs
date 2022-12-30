@@ -42,7 +42,7 @@ public class Login : MonoBehaviour
          * 2 email
          * 3 password
          */
-        Debug.Log(Regex.IsMatch(reg_uname.text, "^[a-zA-Z0-9_]$"));
+        
         switch (marker)
         {
             case 1:
@@ -98,11 +98,34 @@ public class Login : MonoBehaviour
         yield return post.SendWebRequest();
 
         //if no errors
-        if(post.downloadHandler.error == null)
+        if(post.downloadHandler.error == "")
         {
+            //Error Codes
+            // 1 - database connection error
+            // 2 - usernamecheck query error
+            // 3 - user already exists
+            // 4 - emailcheck query error
+            // 5 - email already exists
+            // 6 - insert query error
+
+            switch (post.downloadHandler.text)
+            {
+                case "0":
+                    //No Errors
+                    FeedbackMessage("Success!", Color.green);
+                    Debug.Log("no errors from database.");
+                    break;
+                case "3":
+                    ErrorMessage("user already exists.");
+                    break;
+                case "5":
+                    ErrorMessage("email already exists.");
+                    break;
+                default:
+                    ErrorMessage("server-side error. Please try again.");
+                    break;
+            }
             
-            FeedbackMessage("Success!", Color.green);
-            Debug.Log("no errors from database");
             Debug.Log(post.downloadHandler.text);
         }
         else
@@ -110,6 +133,9 @@ public class Login : MonoBehaviour
             FeedbackMessage("Error occured", Color.red);
             Debug.LogError(post.downloadHandler.error);
         }
+
+        //release locked register button so player can resubmit
+        register_button.enabled = true;
     }
     /*====================== Public Methods Below ===========================*/
     public void UserRegister()
