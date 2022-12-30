@@ -17,9 +17,9 @@ public class Login : MonoBehaviour
 
 
     [Header("Register Variables")]
-    [SerializeField] private TextMeshProUGUI reg_uname;
-    [SerializeField] private TextMeshProUGUI reg_email;
-    [SerializeField] private TextMeshProUGUI reg_passwrd;
+    [SerializeField] private TMP_InputField reg_uname;
+    [SerializeField] private TMP_InputField reg_email;
+    [SerializeField] private TMP_InputField reg_passwrd;
     [SerializeField] private TextMeshProUGUI feedback;
 
     private Color feedback_color;
@@ -42,27 +42,33 @@ public class Login : MonoBehaviour
          * 2 email
          * 3 password
          */
-
+        Debug.Log(Regex.IsMatch(reg_uname.text, "^[a-zA-Z0-9_]$"));
         switch (marker)
         {
             case 1:
                 if (id.Length < 6) ErrorMessage("username is too short");
-                else if (id.Length > 30) ErrorMessage("username is too long");
-                else if (Regex.IsMatch(reg_uname.text, "^[a-zA-Z0-9_]*$")) ErrorMessage("username is invalid");
+                //else if (Regex.IsMatch(reg_uname2.text, "^[a-zA-Z0-9_]$")) ErrorMessage("username is invalid");
+                else if (Regex.IsMatch(reg_uname.text, "^[a-zA-Z0-9_]$")) ErrorMessage("username is invalid");
+                else if (id.Length > 20) ErrorMessage("username is too long");
                 else
                     return true;
                 break;
             case 2:
                 if (id.Length < 6) ErrorMessage("email is too short");
+                else if (!reg_email.text.Contains('@')
+                      || !reg_email.text.Contains('.')
+                      || reg_email.text.IndexOf('@') < 1 
+                      ) ErrorMessage("email is invalid");
                 else if (id.Length > 30) ErrorMessage("email is too long");
-                else if (Regex.IsMatch(reg_uname.text, "^[a-zA-Z0-9_]*$")) ErrorMessage("emal is invalid");
                 else
                     return true;
                 break;
             case 3:
-                return id.Length > 8 ? true : false;
+                if (id.Length < 8) ErrorMessage("password minimum must be 8 characters");
+                else return true;
+                break;
             default:
-                Debug.LogWarning("incorrect validation code sent.");
+                Debug.LogError("incorrect validation code sent.");
                 return false;
         }
         return false;
@@ -92,7 +98,7 @@ public class Login : MonoBehaviour
         yield return post.SendWebRequest();
 
         //if no errors
-        if(post.downloadHandler.error != null)
+        if(post.downloadHandler.error == null)
         {
             
             FeedbackMessage("Success!", Color.green);
@@ -101,16 +107,15 @@ public class Login : MonoBehaviour
         }
         else
         {
+            FeedbackMessage("Error occured", Color.red);
             Debug.LogError(post.downloadHandler.error);
         }
     }
+    
     public void UserRegister()
     {
+        ResetFeedback();
 
-        //Debug.Log("registering...");
-        //Debug.Log(reg_email.text);
-        //Debug.Log(reg_passwrd.text);
-        //Debug.Log(reg_uname.text);
         if (!Validate(1, reg_uname.text))
             Debug.Log("uname failed");
         else if (!Validate(2, reg_email.text))
@@ -138,6 +143,14 @@ public class Login : MonoBehaviour
     public void ResetFeedback()
     {
         feedback.text = "";
+    }
+    public void ResetForm()
+    {
+        Debug.Log("form reset...");
+        reg_email.text = "";
+        reg_passwrd.text = "";
+        reg_uname.text = "";
+        
     }
     
 }

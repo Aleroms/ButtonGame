@@ -6,6 +6,8 @@ TagManager:
   tags:
   - register-button
   - login-button
+  - register-input
+  - login-input
   layers:
   - Default
   - TransparentFX

@@ -1298,9 +1298,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   login_uname: {fileID: 2119017050}
   login_passwrd: {fileID: 1516595983}
-  reg_uname: {fileID: 1472887640}
-  reg_email: {fileID: 564263446}
-  reg_passwrd: {fileID: 1832929197}
+  reg_uname: {fileID: 735999879}
+  reg_email: {fileID: 2110276193}
+  reg_passwrd: {fileID: 1663943370}
   feedback: {fileID: 1959757785}
 --- !u!4 &558175933
 Transform:
@@ -1680,7 +1680,7 @@ GameObject:
   - component: {fileID: 735999879}
   m_Layer: 5
   m_Name: username_input
-  m_TagString: Untagged
+  m_TagString: register-input
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2340,7 +2340,7 @@ GameObject:
   - component: {fileID: 892697251}
   - component: {fileID: 892697250}
   m_Layer: 5
-  m_Name: Button
+  m_Name: return-btn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2437,7 +2437,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 558175932}
         m_TargetAssemblyTypeName: Login, Assembly-CSharp
-        m_MethodName: ResetFeedback
+        m_MethodName: ResetForm
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5243,7 +5243,7 @@ GameObject:
   - component: {fileID: 1663943370}
   m_Layer: 5
   m_Name: password_input
-  m_TagString: Untagged
+  m_TagString: register-input
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6800,7 +6800,7 @@ GameObject:
   - component: {fileID: 2110276193}
   m_Layer: 5
   m_Name: email_input
-  m_TagString: Untagged
+  m_TagString: register-input
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
